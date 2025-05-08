@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rotating Cube - 600px</title>
+    <style>
+        body {
+            margin: 0;
+            background: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /* margin-top: -50px; */
+        }
+
+        .scene {
+            width: 500px;
+            height: 500px;
+            perspective: 1000px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            /* animation: rotateY 30s linear infinite; */
+        }
+
+        .face {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #fff;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+        }
+
+        .face.front {
+            transform: translateZ(250px);
+        }
+
+        .face.back {
+            transform: rotateY(180deg) translateZ(250px);
+        }
+
+        .face.right {
+            transform: rotateY(90deg) translateZ(250px);
+        }
+
+        .face.left {
+            transform: rotateY(-90deg) translateZ(250px);
+        }
+
+        .face.top {
+            transform: rotateX(90deg) translateZ(250px);
+        }
+
+        .face.bottom {
+            transform: rotateX(-90deg) translateZ(250px);
+        }
+
+        @keyframes rotateY {
+            from {
+                transform: rotateY(0deg);
+            }
+
+            to {
+                transform: rotateY(-360deg);
+            }
+        }
+
+        .images {
+            height: 500px;
+            width: 500px;
+            border-radius: 5px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .scene {
+                width: 300px;
+                height: 300px;
+            }
+
+            .cube {
+                width: 100%;
+                height: 100%;
+            }
+
+            .face {
+                width: 300px;
+                height: 300px;
+            }
+
+            .face.front {
+                transform: translateZ(150px);
+            }
+
+            .face.back {
+                transform: rotateY(180deg) translateZ(150px);
+            }
+
+            .face.right {
+                transform: rotateY(90deg) translateZ(150px);
+            }
+
+            .face.left {
+                transform: rotateY(-90deg) translateZ(150px);
+            }
+
+            .face.top {
+                transform: rotateX(90deg) translateZ(150px);
+            }
+
+            .face.bottom {
+                transform: rotateX(-90deg) translateZ(150px);
+            }
+
+            .images {
+                height: 300px;
+                width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scene">
+        <div class="cube" id="cube">
+            <div class="face front">
+                <img id="front" src="" class="images">
+            </div>
+            <div class="face back">
+                <img id="back" src="" class="images">
+            </div>
+            <div class="face right">
+                <img id="right" src="" class="images">
+            </div>
+            <div class="face left">
+                <img id="left" src="" class="images">
+            </div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+        </div>
+    </div>
+
+    <script>
+        let imageArray = [
+            '1.png',
+            '1(1).png',
+            '1(2).png',
+            '1(3).png',
+            '1(4).png',
+            '1(5).png',
+            '1(6).png',
+            '1(7).png',
+            '1(8).png',
+            '1(9).png',
+            '1(10).png',
+            '1(11).png',
+            '1(12).png',
+            '1(13).png',
+            '1(14).png',
+            '1(15).png',
+            '1(16).png',
+            '1(17).png',
+            '1(18).png',
+            '1(19).png',
+        ];
+
+        async function startScript() {
+            let imagesRendered = 2;
+            let rotationState = null;
+            
+            const cube = document.getElementById("cube");
+            let angleY = 0;
+            const front = document.getElementById('front');
+            const back = document.getElementById('back');
+            const right = document.getElementById('right');
+            const left = document.getElementById('left');
+
+            front.setAttribute('src', `./images/${imageArray[0]}`);
+            right.setAttribute('src', `./images/${imageArray[1]}`);
+            
+
+            cube.addEventListener("rotationChange", (e) => {
+                const angle = e.detail.angleY.toFixed(0);
+                console.log(`Y Rotation: ${angle}`);
+                if (angle == -45) {
+                    if(rotationState != 45) {
+                        back.setAttribute('src', `./images/${imageArray[imagesRendered]}`);
+                        imagesRendered++;
+                        rotationState = 45;
+                    }
+                } else if (angle == -135) {
+                    if(rotationState != 135) {
+                        left.setAttribute('src', `./images/${imageArray[imagesRendered]}`);
+                        imagesRendered++;
+                        rotationState = 135;
+                    }
+                } else if (angle == -225) {
+                    if(rotationState != 225) {
+                        front.setAttribute('src', `./images/${imageArray[imagesRendered]}`);
+                        imagesRendered++;
+                        rotationState = 225;
+                    }
+                } else if (angle == -315) {
+                    if(rotationState != 315) {
+                        right.setAttribute('src', `./images/${imageArray[imagesRendered]}`);
+                        imagesRendered++;
+                        rotationState = 315;
+                    }
+                }
+
+                if(imagesRendered - 1 == imageArray.length) {
+                    // End State
+                }
+            });
+
+            async function rotateCubeLoop() {
+                angleY -= 0.2;
+
+                if (angleY <= -360) {
+                    angleY = 0;
+                }
+
+                cube.style.transform = `rotateY(${angleY}deg)`;
+
+                cube.dispatchEvent(new CustomEvent("rotationChange", {
+                    detail: { angleY }
+                }));
+
+                requestAnimationFrame(rotateCubeLoop);
+            }
+
+            function sleep(ms) {
+                return new Promise((res, rej) => setTimeout(() => res(), ms));
+            }
+
+            // cube.style.transform = `rotateY(50deg)`;
+            await sleep(5000);
+            rotateCubeLoop();
+        }
+        startScript();
+    </script>
+</body>
+
+</html>
