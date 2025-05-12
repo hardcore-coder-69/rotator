@@ -13,6 +13,8 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow: hidden;
             /* margin-top: -50px; */
         }
 
@@ -84,7 +86,29 @@
             border-radius: 5px;
         }
 
+        .title {
+            display: none;
+        }
+
+        .bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+        }
+
+
         @media screen and (max-width: 600px) {
+            body {
+                flex-direction: column;
+            }
+
+            .title {
+                display: block;
+                color: #fff;
+                margin-bottom: 50px;
+            }
+            
             .scene {
                 width: 300px;
                 height: 300px;
@@ -133,6 +157,9 @@
 </head>
 
 <body>
+    <h1 class="title">High Protein Foods</h1>
+    <img src="./images/bg.jpg" class="bg">
+    
     <div class="scene">
         <div class="cube" id="cube">
             <div class="face front">
